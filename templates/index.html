@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Pomodoro Timer Extension</title>
+</head>
+<body>
+    
+    
+    <div class="container">
+        <h1 class="title">Pomodoro Timer</h1>
+        <div class="timer-container">
+            <div id="timer" class="timer">25:00</div>
+            <div id="breakTime" class="timer break-timer">5:00</div>
+        </div>
+        <div class="text-container">
+            <div id="timerText" class="text">Tiempo de estudio</div>
+            <div id="breakText" class="text" style="display:none;">Descansa</div>
+        </div>
+        <div class="controls">
+            <button id="startBtn" class="btn">Start</button>
+            <button id="stopBtn" class="btn">Stop</button>
+        </div>
+        <div class="info">
+            <p class="info-text">Ciclos completados: <span id="completedCycles" class="info-value">0</span></p>
+            <p class="info-text">25 minutos de estudio 5 minutos de descanso, 20 minutos de descanso cada 4 ciclos <span id="longBreak" class="info-value"></span></p>
+        </div>
+        <button id="muteBtn" class="mute-btn">Mute</button>
+        
+    </div>
+    <audio id="studyAudio" preload="auto" autoplay="false">
+        <source src="/static/sound/campana1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="breakAudio" preload="auto" autoplay="false">
+        <source src="/static/sound/campana2.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="longBreakAudio" preload="auto" autoplay="false">
+        <source src="/static/sound/campana3.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="rainAudio" preload="auto" autoplay="false" loop>
+        <source src="/static/sound/lluvia.mp3" type="audio/mpeg">
+    </audio>
+    
+    
+    <button id="modeToggle" class="dark-mode">Modo Oscuro</button>
+    <script src="/static/popup.js"></script>
+</body>
+</html>
+
