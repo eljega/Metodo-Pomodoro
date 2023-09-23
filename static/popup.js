@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
             timerElement.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-            if (seconds >= 120) { // 1200 segundos = 20 minutos (descanso largo)
+            if (seconds >= 1200) { // 1200 segundos = 20 minutos (descanso largo)
                 clearInterval(studyIntervalId); // Detener el contador largo
                 timerElement.textContent = '20:00';
                 // Reiniciar el ciclo (volvemos a los 25 minutos)
