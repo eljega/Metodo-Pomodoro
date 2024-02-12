@@ -25,16 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const rainAudio = document.getElementById('rainAudio');
     const muteBtn = document.getElementById('muteBtn');
     const modeToggle = document.getElementById('modeToggle');
-    const checkboxInput = document.getElementById('checkboxInput'); // Asegúrate de tener este input en tu HTML
+    const checkboxInput = document.getElementById('checkboxInput');
 
-    // Ajustando solo el event listener para el nuevo interruptor de silencio
+    
     checkboxInput.addEventListener('change', function() {
-        // Esta es la única parte que cambiamos
         rainAudio.muted = this.checked;
     });
 
-    // Si deseas mantener el sonido de lluvia activado desde el inicio
-    // y asegurarte de que respeta el estado de "mute" basado en el interruptor al cargar la página:
+    // Reproducir el audio de lluvia automáticamente
     rainAudio.muted = checkboxInput.checked;
     if (!rainAudio.muted) {
         rainAudio.play().catch(e => console.error("Error al intentar reproducir el audio automáticamente:", e));
@@ -42,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     rainAudio.loop = true;// Reproducir la lluvia de fondo en bucle
-    rainAudio.volume = 0.5;// Establecer el volumen de la lluvia de fondo al 50%
+    rainAudio.volume = 0.5;
 
     // Event listener para el botón de inicio
     startBtn.addEventListener('click', function() {
@@ -67,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener para el botón de pausa
     pauseBtn.addEventListener('click', function() {
         if ((studyActive || breakActive) && !isPaused) {
-            // Pausar
             clearInterval(studyIntervalId);
             clearInterval(breakIntervalId);
             pauseBtn.textContent = 'Reanudar';
@@ -195,10 +192,8 @@ function updateTimerDisplay(timerElement, timeLeft) {
     modeToggle.addEventListener('click', function() {
         if (body.classList.contains('dark')) {
             body.classList.remove('dark');
-            //modeToggle.textContent = 'Modo Oscuro';
         } else {
             body.classList.add('dark');
-            //modeToggle.textContent = 'Modo Claro';
         }
 });
 
