@@ -1,9 +1,8 @@
 from flask import Flask, jsonify, render_template
-import time
-from flask_cors import CORS  # Importa Flask-CORS
+from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Habilita CORS para toda la aplicación
+CORS(app)
 
 
 

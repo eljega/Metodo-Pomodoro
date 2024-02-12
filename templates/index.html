@@ -5,20 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/styles.css">
-    <title>Pomodoro Timer Extension</title>
+    <link rel="stylesheet" href="/static/buttons.css">
+    <title>Temporizador Pomodoro - Mejora tu Enfoque</title>
 </head>
 <body>
     
     
     <div class="container">
-        <h1 class="title">Pomodoro Timer</h1>
+        <h1 class="title">Temporizador Pomodoro - Enfoca y Produce</h1>
         <div class="timer-container">
             <div id="timer" class="timer">25:00</div>
             <div id="breakTime" class="timer break-timer">5:00</div>
         </div>
         <div class="text-container">
-            <div id="timerText" class="text">Tiempo de estudio</div>
-            <div id="breakText" class="text" style="display:none;">Descansa</div>
+            <div id="timerText" class="text">Sesión de Enfoque</div>
+            <div id="breakText" class="text" style="display:none;">Toma un Descanso</div>
         </div>
         <div class="controls">
             <button id="startBtn" class="btn">Iniciar</button>
@@ -49,7 +50,17 @@
     </audio>
     
     
-    <button id="modeToggle" class="dark-mode">Modo Oscuro</button>
+    <button class="theme__icon" id="modeToggle">
+        <span></span>
+        <span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span></span>
+      </button>
+      
     <script src="/static/main.js"></script>
 </body>
 </html>

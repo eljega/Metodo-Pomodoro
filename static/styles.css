@@ -188,7 +188,6 @@ button:hover {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: rgb(255, 255, 255);
     color: #000000;
     border: none;
     cursor: pointer;
@@ -196,7 +195,7 @@ button:hover {
 }
 
 body.dark #modeToggle{
-    background-color: rgb(60, 1, 108);
+    background-color: rgba(60, 1, 108, 0);
     color: #fff;
 }
 

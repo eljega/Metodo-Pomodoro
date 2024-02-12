@@ -181,10 +181,10 @@ function updateTimerDisplay(timerElement, timeLeft) {
     modeToggle.addEventListener('click', function() {
         if (body.classList.contains('dark')) {
             body.classList.remove('dark');
-            modeToggle.textContent = 'Modo Oscuro';
+            //modeToggle.textContent = 'Modo Oscuro';
         } else {
             body.classList.add('dark');
-            modeToggle.textContent = 'Modo Claro';
+            //modeToggle.textContent = 'Modo Claro';
         }
 });
 
