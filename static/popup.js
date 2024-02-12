@@ -1,9 +1,21 @@
-let isMuted = false; // Variable para controlar el estado de silencio
 const body = document.body; // Obtén el elemento body del documento;
+// Variable para controlar el estado de silencio
+let isMuted = false;
+// Variable para rastrear si el temporizador está pausado
+let isPaused = false;
+// Tiempo restante para cada tipo de temporizador
+let studyTimeLeft = 1500; // 25 minutos en segundos
+let breakTimeLeft = 300; // 5 minutos en segundos
+let longBreakTimeLeft = 1200; // 20 minutos en segundos
+// Variable para almacenar qué temporizador está activo ('study', 'break', 'longBreak')
+let activeTimer;
+// Contador de ciclos completados
+let cycleCounter = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
     const studyTimer = document.getElementById('timer');
     const breakTimer = document.getElementById('breakTime');
     const timerText = document.getElementById('timerText');
@@ -15,154 +27,127 @@ document.addEventListener('DOMContentLoaded', function() {
     const rainAudio = document.getElementById('rainAudio');
     const muteBtn = document.getElementById('muteBtn');
     const modeToggle = document.getElementById('modeToggle');
-    
+    let studyIntervalId;
+    let breakIntervalId;
+
     
 
     // Reproducir el sonido de lluvia al cargar la página
-    rainAudio.loop = true; // Reproducir en bucle
-    rainAudio.volume = 0.5; // Ajusta el volumen (opcional)
+    rainAudio.loop = true;
+    rainAudio.volume = 0.5;
 
-
-    
-
-    
-    let studyActive = false;
-    let breakActive = false;
-    let studyIntervalId;
-    let breakIntervalId;
-    let cycleCounter = 0;
-
+    // Event listener para el botón de inicio
     startBtn.addEventListener('click', function() {
-        console.log('Start button clicked');
-        if (!studyActive && !breakActive) {
-            // Iniciar el contador largo (25 minutos) si ninguno está activo
-            startStudyTimer(studyTimer, timerText, breakText);
-            studyActive = true;
+        if (!isPaused && !studyIntervalId && !breakIntervalId) {
+            startStudyTimer();
             timerText.textContent = 'Tiempo de estudio';
-        } else if (studyActive) {
-            // Si el contador largo está activo, detenerlo
-            stopStudyTimer();
-            studyActive = false;
-            if (!breakActive) {
-                // Si el contador corto no está activo, reiniciar el contador largo
-                startStudyTimer(studyTimer, timerText, breakText);
-                studyActive = true;
-                timerText.textContent = 'Tiempo de estudio';
-            }
-        } else if (breakActive) {
-            // Si el contador corto está activo, detenerlo
-            stopBreakTimer();
-            breakActive = false;
-            if (!studyActive) {
-                // Si el contador largo no está activo, reiniciar el contador corto
-                startBreakTimer(breakTimer, timerText, breakText);
-                breakActive = true;
-                timerText.textContent = 'Tiempo del break';
-            }
         }
     });
 
+    // Event listener para el botón de detener
     stopBtn.addEventListener('click', function() {
-        if (studyActive) {
-            // Detener el contador largo
-            stopStudyTimer();
-            studyActive = false;
-        } else if (breakActive) {
-            // Detener el contador corto
-            stopBreakTimer();
-            breakActive = false;
+        stopStudyTimer();
+        stopBreakTimer();
+        studyTimer.textContent = '25:00';
+        breakTimer.textContent = '5:00';
+        studyTimeLeft = 1500;
+        breakTimeLeft = 300;
+        isPaused = false;
+        pauseBtn.textContent = 'Pausar';
+    });
+
+    // Event listener para el botón de pausa
+    pauseBtn.addEventListener('click', function() {
+        if (isPaused) {
+            // Reanudar
+            if (activeTimer === 'study') {
+                startStudyTimer();
+            } else if (activeTimer === 'break') {
+                startBreakTimer();
+            }
+            pauseBtn.textContent = 'Pausar';
+            isPaused = false;
+        } else {
+            // Pausar
+            clearInterval(studyIntervalId);
+            clearInterval(breakIntervalId);
+            pauseBtn.textContent = 'Reanudar';
+            isPaused = true;
         }
     });
 
-    function startStudyTimer(timerElement, timerText, breakText) {
-        let seconds = 0;
-        studyAudio.play(); // Reproducir el sonido de estudio
+    // Event listener para el botón de silenciar
+    muteBtn.addEventListener('click', function() {
+        isMuted = !isMuted;
+        rainAudio.muted = isMuted;
+        muteBtn.textContent = isMuted ? 'Activar sonido' : 'Silenciar';
+    });
+
+
+
+    // Función para iniciar el temporizador de estudio
+    function startStudyTimer() {
+        studyActive = true;
+        activeTimer = 'study';
+        studyAudio.play();
         rainAudio.play();
         studyIntervalId = setInterval(function() {
-            
-            seconds++;
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            timerElement.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-            if (seconds >= 1500) { // 1500 segundos = 25 minutos
-                clearInterval(studyIntervalId); // Detener el contador largo
-                timerElement.textContent = '25:00';
+            studyTimeLeft--;
+            if (studyTimeLeft === 0) {
+                clearInterval(studyIntervalId);
+                studyTimer.textContent = '25:00';
                 cycleCounter++;
                 completedCycles.textContent = cycleCounter;
-
                 if (cycleCounter % 4 === 0) {
-                    // Cada 4 ciclos, activar el descanso largo (20 minutos)
-                    breakText.style.display = 'block';
-                    timerText.style.display = 'none';
-                    startLongBreakTimer(studyTimer, timerText, breakText);
+                    startLongBreakTimer();
                 } else {
-                    // Iniciar el contador corto (5 minutos)
-                    startBreakTimer(breakTimer, timerText, breakText);
+                    startBreakTimer();
                 }
             }
+            updateTimerDisplay(studyTimer, studyTimeLeft);
         }, 1000);
     }
 
+    // Función para iniciar el temporizador de descanso
+    function startBreakTimer() {
+        breakActive = true;
+        activeTimer = 'break';
+        breakAudio.play();
+        breakIntervalId = setInterval(function() {
+            breakTimeLeft--;
+            if (breakTimeLeft === 0) {
+                clearInterval(breakIntervalId);
+                breakTimer.textContent = '5:00';
+                startStudyTimer();
+            }
+            updateTimerDisplay(breakTimer, breakTimeLeft);
+        }, 1000);
+    }
+
+    // Función para detener el temporizador de estudio
     function stopStudyTimer() {
         clearInterval(studyIntervalId);
+        studyActive = false;
+        activeTimer = null;
+        studyIntervalId = null; // Añade esta línea
     }
 
-    function startBreakTimer(timerElement, timerText, breakText) {
-        let seconds = 0;
-        breakAudio.play(); // Reproducir el sonido de break
-        breakIntervalId = setInterval(function() {
-            seconds++;
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            timerElement.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-            if (seconds >= 300) { // 300 segundos = 5 minutos (descanso)
-                clearInterval(breakIntervalId); // Detener el contador corto
-                timerElement.textContent = '05:00';
-                // Iniciar el contador largo nuevamente (25 minutos)
-                timerText.style.display = 'block'; // Mostrar el texto de "Tiempo de estudio"
-                breakText.style.display = 'none'; // Ocultar el texto de "Descansa"
-                startStudyTimer(studyTimer, timerText, breakText);
-                studyActive = true;
-            }
-        }, 1000);
-    }
-
+    // Función para detener el temporizador de descanso
     function stopBreakTimer() {
         clearInterval(breakIntervalId);
+        breakActive = false;
+        activeTimer = null;
+        breakIntervalId = null; // Añade esta línea
     }
 
-    function startLongBreakTimer(timerElement, timerText, breakText) {
-        let seconds = 0;
-        longBreakAudio.play(); // Reproducir el sonido de descanso largo
-        studyIntervalId = setInterval(function() {
-            seconds++;
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            timerElement.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-            if (seconds >= 1200) { // 1200 segundos = 20 minutos (descanso largo)
-                clearInterval(studyIntervalId); // Detener el contador largo
-                timerElement.textContent = '20:00';
-                // Reiniciar el ciclo (volvemos a los 25 minutos)
-                timerText.style.display = 'block';
-                breakText.style.display = 'none';
-                startStudyTimer(studyTimer, timerText, breakText);
-                studyActive = true;
-            }
-        }, 1000);
+
+    // Función para actualizar la visualización del temporizador
+    function updateTimerDisplay(timerElement, timeLeft) {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     }
 });
-
-    // Agrega un controlador de eventos al botón de mute/desmute
-    muteBtn.addEventListener('click', function() {
-        if (isMuted) {
-            rainAudio.muted = false;
-            muteBtn.textContent = 'Mute';
-        } else {
-            rainAudio.muted = true;
-            muteBtn.textContent = 'Unmute';
-        }
-        isMuted = !isMuted;
-    });
     
 
     modeToggle.addEventListener('click', function() {
@@ -173,4 +158,5 @@ document.addEventListener('DOMContentLoaded', function() {
             body.classList.add('dark');
             modeToggle.textContent = 'Modo Claro';
         }
-    });
+});
+
