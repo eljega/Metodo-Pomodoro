@@ -1,23 +1,23 @@
-/* CSS */
+
 body {
     background-image: url('/static/imagenes/back1.webp'); 
-    background-size: cover; /* Ajustar la imagen al tamaño de la ventana */
-    background-repeat: no-repeat; /* Evitar la repetición de la imagen */
-    background-attachment: fixed; /* Fijar el fondo para que no se desplace con el contenido */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background-color: #fff;
-    color: #fff; /* Color de texto predeterminado para asegurarse de que sea legible */
+    color: #fff;
+    transition: background-color 0.5s ease;
+
 }
 
 /* Estilos para el modo oscuro */
 body.dark {
-    /* Estilos para el modo oscuro */
     background-image: url('/static/imagenes/back2.webp'); 
     background-color: #222222;
     color: #fff;
 }
 
 @media (max-width: 768px) {
-    /* Cambia la imagen de fondo en dispositivos móviles */
     body {
         background-image: url('/static/imagenes/back1.webp');
     }
@@ -29,30 +29,39 @@ body.dark {
     margin: 0 auto;
     margin-top: 250px;
     padding: 20px;
-    background-color: #edebebeb;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     position: relative;
+    background-color: rgba(255, 255, 255, 0.635);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 body.dark .container {
-    /* Estilos para el contenedor en el modo oscuro */
-    background-color: #580270e3;
     box-shadow: 0 0 10px rgba(56, 3, 99, 0.361);
+    background-color: rgba(88, 2, 112, 0.9);
+    backdrop-filter: blur(10px);
 }
 
 .title {
     font-size: 24px;
+    text-align: center;
     margin-bottom: 20px;
-    color: #333;
-    font-family: Arial, sans-serif; /* Cambia la fuente a Arial o una fuente sans-serif */
-    font-weight: bold; /* Hace que el texto sea más grueso */
-    max-width: 100%; /* Evita que el texto se salga de los límites */
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.092); /* Sombra de texto menos difusa */
+    color: #000000;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    max-width: 100%;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 body.dark .title{
     color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .timer-container {
@@ -64,36 +73,37 @@ body.dark .title{
 .timer {
     font-size: 36px;
     padding: 10px 20px;
-    background-color: #2ecc71;
+    background-color: #311B92;
     color: #fff;
     border-radius: 5px;
-    font-family: Arial, sans-serif; /* Cambia la fuente a Arial o una fuente sans-serif */
-    font-weight: bold; /* Hace que el texto sea más grueso */
-    max-width: 100%; /* Evita que el texto se salga de los límites */
-    text-shadow: 1px 1px 0 rgb(0, 0, 0); /* Sombra de texto menos difusa */
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    max-width: 100%;
+    text-shadow: 1px 1px 0 rgb(0, 0, 0);
 }
 
 .break-timer {
-    background-color: #e74c3c;
+    background: linear-gradient(145deg, #283593, #3748c7);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
 }
 
 .text-container {
     margin-bottom: 20px;
-    font-family: Arial, sans-serif; /* Cambia la fuente a Arial o una fuente sans-serif */
-    font-weight: bold; /* Hace que el texto sea más grueso */
-    max-width: 100%; /* Evita que el texto se salga de los límites */
-    text-shadow: 1px 1px 0 rgb(0, 0, 0); /* Sombra de texto menos difusa */
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    max-width: 100%;
+    text-shadow: 1px 1px 0 rgb(0, 0, 0);
 }
 
 .text {
     font-size: 18px;
+    text-align: center;
     color: #333;
-    font-family: Arial, sans-serif; /* Cambia la fuente a Arial o una fuente sans-serif */
-    font-weight: bold; /* Hace que el texto sea más grueso */
-    max-width: 100%; /* Evita que el texto se salga de los límites */
-    text-shadow: 1px 1px 0 rgb(0, 0, 0); /* Sombra de texto menos difusa */
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    max-width: 100%;
 }
-
 
 
 .controls {
@@ -109,14 +119,16 @@ body.dark .title{
 
 .info-text {
     margin-bottom: 5px;
-    font-family: Arial, sans-serif; /* Cambia la fuente a Arial o una fuente sans-serif */
-    font-weight: bold; /* Hace que el texto sea más grueso */
-    max-width: 100%; /* Evita que el texto se salga de los límites */
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0); /* Sombra de texto menos difusa */
+    color: #000000;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    max-width: 100%;
 }
 
 body.dark .info-text{
     color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .info-value {
@@ -126,21 +138,32 @@ body.dark .info-text{
 
 body.dark .info-value{
     color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
+body.dark .timer {
+    background: linear-gradient(145deg, #0f3460, #16213e);
+}
+
+body.dark .break-timer {
+    background: linear-gradient(145deg, #6a2c70, #b83b5e);
+}
 
 
 /* Estilo para el texto de Descansa y Tiempo de estudio */
 #breakText {
-    font-size: 24px; /* Tamaño de fuente más grande */
-    color: #e74c3c; /* Color diferente para Descansa */
+    font-size: 24px;
+    /*color: #e74c3c;*/
 }
 
 #timerText {
-    font-size: 24px; /* Tamaño de fuente más grande */
-    color: #2ecc71; /* Color para Tiempo de estudio */
+    font-size: 24px;
+    color: #1565C0;
 }
 
+body.dark #timerText {
+    color: #d9fbff;
+}
 
 /* CSS para el botón de cambio de modo */
 #modeToggle {
@@ -150,7 +173,7 @@ body.dark .info-value{
     color: #000000;
     border: none;
     cursor: pointer;
-    z-index: 100; /* Asegura que esté en la parte superior de otros elementos */
+    z-index: 100;
 }
 
 body.dark #modeToggle{
@@ -161,10 +184,10 @@ body.dark #modeToggle{
 @media (max-width: 768px) {
     /* Estilos para dispositivos móviles */
     #modeToggle {
-        position: relative; /* Cambia la posición del botón */
-        top: 0; /* Ajusta la posición vertical según sea necesario */
-        right: 0; /* Ajusta la posición horizontal según sea necesario */
-        margin-top: 10px; /* Agrega margen superior para separarlo de otros elementos */
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-top: 10px;
     }
 }
 
@@ -172,7 +195,7 @@ body.dark #modeToggle{
 /* Estilos para el modo oscuro */
 .dark-mode {
     background-color: #333;
-    color: #fff; /* Cambia el color del texto en modo oscuro */
+    color: #fff;
 }
 
 /* Estilos para el modo claro */
