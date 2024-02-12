@@ -1,17 +1,15 @@
-const body = document.body; // Obtén el elemento body del documento;
-// Variable para controlar el estado de silencio
+const body = document.body; 
 let isMuted = false;
-// Variable para rastrear si el temporizador está pausado
 let isPaused = false;
-// Tiempo restante para cada tipo de temporizador
-let studyTimeLeft = 10; // 25 minutos en segundos
-let breakTimeLeft = 15; // 5 minutos en segundos
-let longBreakTimeLeft = 30; // 20 minutos en segundos
-// Variable para almacenar qué temporizador está activo ('study', 'break', 'longBreak')
+let studyTimeLeft = 1500;
+let breakTimeLeft = 300;
+let longBreakTimeLeft = 1200;
 let activeTimer;
-// Contador de ciclos completados
 let cycleCounter = 0;
+let studyIntervalId;
+let breakIntervalId;
 
+// Variables para controlar el estado del temporizador
 document.addEventListener('DOMContentLoaded', function() {
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
@@ -27,14 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const rainAudio = document.getElementById('rainAudio');
     const muteBtn = document.getElementById('muteBtn');
     const modeToggle = document.getElementById('modeToggle');
-    let studyIntervalId;
-    let breakIntervalId;
 
-    
 
-    // Reproducir el sonido de lluvia al cargar la página
-    rainAudio.loop = true;
-    rainAudio.volume = 0.5;
+    rainAudio.loop = true;// Reproducir la lluvia de fondo en bucle
+    rainAudio.volume = 0.5;// Establecer el volumen de la lluvia de fondo al 50%
 
     // Event listener para el botón de inicio
     startBtn.addEventListener('click', function() {
@@ -50,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
         stopBreakTimer();
         studyTimer.textContent = '25:00';
         breakTimer.textContent = '5:00';
-        studyTimeLeft = 10; // 25 minutos en segundos
-        breakTimeLeft = 15; // 5 minutos en segundos
+        studyTimeLeft = 1500;
+        breakTimeLeft = 300;
         isPaused = false;
         pauseBtn.textContent = 'Pausar';
     });
@@ -65,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
             pauseBtn.textContent = 'Reanudar';
             isPaused = true;
         } else if (isPaused) {
-            // Reanudar
             if (activeTimer === 'study') {
                 startStudyTimer();
             } else if (activeTimer === 'break') {
@@ -79,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
 
-
     // Event listener para el botón de silenciar
     muteBtn.addEventListener('click', function() {
         isMuted = !isMuted;
@@ -88,11 +80,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-
     // Función para iniciar el temporizador de estudio
     function startStudyTimer() {
         studyActive = true;
         activeTimer = 'study';
+        timerText.textContent = 'Tiempo de estudio';
+        breakText.style.display = 'none';
         studyAudio.play();
         rainAudio.play();
         studyIntervalId = setInterval(function() {
@@ -113,18 +106,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     }
 
+
     // Función para iniciar el temporizador de descanso
     function startBreakTimer() {
         breakActive = true;
         activeTimer = 'break';
+        timerText.textContent = '';
+        breakText.style.display = 'block';
         breakAudio.play();
         breakIntervalId = setInterval(function() {
             breakTimeLeft--;
             if (breakTimeLeft <= 0) {
                 clearInterval(breakIntervalId);
                 breakTimer.textContent = '5:00';
-                breakTimeLeft = 15; // Restablecer el tiempo de descanso
-                startStudyTimer();
+                breakTimeLeft = 300;
+                startStudyTimer(timerText, breakText);
             }
             updateTimerDisplay(breakTimer, breakTimeLeft);
         }, 1000);
@@ -134,39 +130,42 @@ document.addEventListener('DOMContentLoaded', function() {
     function startLongBreakTimer() {
         breakActive = true;
         activeTimer = 'longBreak';
+        timerText.textContent = 'Descanso Largo';
+        breakText.style.display = 'block';
         longBreakAudio.play();
         breakIntervalId = setInterval(function() {
             longBreakTimeLeft--;
             if (longBreakTimeLeft <= 0) {
                 clearInterval(breakIntervalId);
                 breakTimer.textContent = '20:00';
-                longBreakTimeLeft = 30; // Restablecer el tiempo de descanso largo
-                startStudyTimer(); // Inicia el temporizador de estudio después del descanso largo
+                longBreakTimeLeft = 1200;
+                startStudyTimer();
             }
             updateTimerDisplay(breakTimer, longBreakTimeLeft);
         }, 1000);
     }
+
 
     // Función para detener el temporizador de estudio
     function stopStudyTimer() {
         clearInterval(studyIntervalId);
         studyActive = false;
         activeTimer = null;
-        studyIntervalId = null; // Añade esta línea
+        studyIntervalId = null;
     }
+
 
     // Función para detener el temporizador de descanso
     function stopBreakTimer() {
         clearInterval(breakIntervalId);
         breakActive = false;
         activeTimer = null;
-        breakIntervalId = null; // Añade esta línea
+        breakIntervalId = null;
     }
-
-
 
 });
 
+// Función para actualizar el temporizador
 function updateTimerDisplay(timerElement, timeLeft) {
     if (timeLeft < 0) {
         timeLeft = 0;
@@ -178,6 +177,7 @@ function updateTimerDisplay(timerElement, timeLeft) {
 }
 
 
+// Event listener para el botón de alternar modo
     modeToggle.addEventListener('click', function() {
         if (body.classList.contains('dark')) {
             body.classList.remove('dark');
