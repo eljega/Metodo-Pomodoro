@@ -58,7 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener para el botón de pausa
     pauseBtn.addEventListener('click', function() {
-        if (isPaused) {
+        // Solo permitir pausar si el temporizador está activo y no está pausado
+        if ((studyActive || breakActive) && !isPaused) {
+            clearInterval(studyIntervalId);
+            clearInterval(breakIntervalId);
+            pauseBtn.textContent = 'Reanudar';
+            isPaused = true;
+        } else if (isPaused) {
             // Reanudar
             if (activeTimer === 'study') {
                 startStudyTimer();
@@ -67,14 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             pauseBtn.textContent = 'Pausar';
             isPaused = false;
-        } else {
-            // Pausar
-            clearInterval(studyIntervalId);
-            clearInterval(breakIntervalId);
-            pauseBtn.textContent = 'Reanudar';
-            isPaused = true;
         }
     });
+
 
     // Event listener para el botón de silenciar
     muteBtn.addEventListener('click', function() {
