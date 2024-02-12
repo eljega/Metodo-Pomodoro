@@ -25,6 +25,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const rainAudio = document.getElementById('rainAudio');
     const muteBtn = document.getElementById('muteBtn');
     const modeToggle = document.getElementById('modeToggle');
+    const checkboxInput = document.getElementById('checkboxInput'); // Asegúrate de tener este input en tu HTML
+
+    // Ajustando solo el event listener para el nuevo interruptor de silencio
+    checkboxInput.addEventListener('change', function() {
+        // Esta es la única parte que cambiamos
+        rainAudio.muted = this.checked;
+    });
+
+    // Si deseas mantener el sonido de lluvia activado desde el inicio
+    // y asegurarte de que respeta el estado de "mute" basado en el interruptor al cargar la página:
+    rainAudio.muted = checkboxInput.checked;
+    if (!rainAudio.muted) {
+        rainAudio.play().catch(e => console.error("Error al intentar reproducir el audio automáticamente:", e));
+    }
 
 
     rainAudio.loop = true;// Reproducir la lluvia de fondo en bucle
@@ -78,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rainAudio.muted = isMuted;
         muteBtn.textContent = isMuted ? 'Activar sonido' : 'Silenciar';
     });
-
+    
 
     // Función para iniciar el temporizador de estudio
     function startStudyTimer() {
