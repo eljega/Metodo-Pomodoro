@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (studyTimeLeft <= 0) {
                 clearInterval(studyIntervalId);
                 studyTimer.textContent = '25:00';
-                studyTimeLeft = 10;
+                studyTimeLeft = 1500;
                 cycleCounter++;
                 completedCycles.textContent = cycleCounter;
                 if (cycleCounter % 4 === 0) {
